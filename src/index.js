@@ -1,9 +1,6 @@
-const getState = require('./state');
-const map = require('./rooms/test-map');
-const bootstrap = require('./bootstrap');
-require('colors');
+const actions = require('./actions');
 
-(async () => {
-  const state = await getState();
-  await bootstrap(state, map);
-})();
+module.exports = async (state, map) => {
+  await actions.enterRoom(state, map, state.location);
+  actions.promptForAction(state, map);
+};

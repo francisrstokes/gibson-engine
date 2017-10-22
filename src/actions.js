@@ -1,63 +1,66 @@
-const inquirer = require('inquirer');
+const {
+  prompt,
+  getLocationProperty
+} = require('./util');
 
-// const LOOK_AROUND = 'Look around';
+const OPTION_STAY = 'Stay';
+
+const LOOK_AROUND = 'Look around';
 // const INVENTORY = 'Inventory';
 const GO = 'Go';
 // const COMMAND = 'Command';
 
 async function goFunc (state, map) {
   const currentLocation = map[state.location];
-  const chosenExit = await inquirer.prompt([{
-    message: 'You can go',
-    choices: [
-      ...currentLocation.exits.map(exit => ({
-        name: exit.name,
-        value: exit.room
-      })),
-      'Stay'
-    ],
-    name: 'response',
-    type: 'list'
-  }]).then(res => res.response);
+  const exits = await getLocationProperty(state, currentLocation, 'exits');
+  const chosenExit = await prompt.choice('You can go', [...exits, OPTION_STAY]);
 
-  if (chosenExit === 'Stay') {
-    await promptForAction(state, map);
+  if (chosenExit !== OPTION_STAY) {
+    const doEnter = ('onExit' in currentLocation)
+      ? await currentLocation.onExit(state)
+      : true;
+    if (doEnter) await enterRoom(state, map, chosenExit);
+  }
+}
+
+async function lookFunc (state, map) {
+  const currentLocation = map[state.location];
+  if (typeof currentLocation.description === 'function') {
+    await currentLocation.description(state);
   } else {
-    if ('onExit' in currentLocation) {
-      currentLocation.onExit(state);
-    }
-    await enterRoom(state, map, chosenExit);
+    process.stdout.write(`${currentLocation.description}\n`);
   }
 }
 
 async function enterRoom (state, map, location) {
   state.location = location;
   const currentLocation = map[state.location];
-  if ('onEnter' in currentLocation) {
-    currentLocation.onEnter(state);
+  const doLook = ('onEnter' in currentLocation)
+    ? await currentLocation.onEnter(state)
+    : true;
+  if (doLook) {
+    process.stdout.write(`${currentLocation.description}\n`);
   }
-  process.stdout.write(`${currentLocation.description}\n`);
-  await promptForAction(state, map);
 }
 
 async function promptForAction (state, map) {
-  const action = await inquirer.prompt([
-    {
-      message: 'What will you do',
-      choices: [
-        GO
-      ],
-      name: 'response',
-      type: 'list'
-    }
-  ]).then(res => res.response);
+  const action = await prompt.choice(
+    'What will you do',
+    [
+      LOOK_AROUND,
+      GO
+    ]
+  );
 
   switch (action) {
     case GO:
       await goFunc(state, map);
       break;
-    default:
+    case LOOK_AROUND:
+      await lookFunc(state, map);
+      break;
   }
+  await promptForAction(state, map);
 }
 
 module.exports = { promptForAction, enterRoom };
