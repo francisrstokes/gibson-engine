@@ -1,5 +1,5 @@
 {
-  "name": "text-engine",
+  "name": "text-engine-js",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,9 +9,17 @@
   "author": "Francis Stokes",
   "license": "MIT",
   "dependencies": {
-    "colors": "^1.1.2",
     "inquirer": "^3.3.0",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/francisrstokes/text-engine.git"
+  },
+  "homepage": "https://github.com/francisrstokes/text-engine",
+  "bugs": {
+    "url": "https://github.com/francisrstokes/text-engine/issues",
+    "email": "francisrstokes@outlook.com"
   }
 }
