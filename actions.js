@@ -17,7 +17,7 @@ async function goFunc (state, map) {
 
   if (chosenExit !== OPTION_STAY) {
     const doEnter = ('onExit' in currentLocation)
-      ? await currentLocation.onExit(state)
+      ? await currentLocation.onExit(state, map)
       : true;
     if (doEnter) await enterRoom(state, map, chosenExit);
   }
@@ -26,7 +26,7 @@ async function goFunc (state, map) {
 async function lookFunc (state, map) {
   const currentLocation = map[state.location];
   if (typeof currentLocation.description === 'function') {
-    await currentLocation.description(state);
+    await currentLocation.description(state, map);
   } else {
     process.stdout.write(`${currentLocation.description}\n`);
   }
@@ -36,7 +36,7 @@ async function enterRoom (state, map, location) {
   state.location = location;
   const currentLocation = map[state.location];
   const doLook = ('onEnter' in currentLocation)
-    ? await currentLocation.onEnter(state)
+    ? await currentLocation.onEnter(state, map)
     : true;
   if (doLook) {
     process.stdout.write(`${currentLocation.description}\n`);
