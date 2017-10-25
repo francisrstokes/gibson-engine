@@ -2,17 +2,22 @@ const { prompt } = require('../util');
 const go = require('./go');
 const look = require('./look');
 const take = require('./items/take');
+const examine = require('./items/examine');
+const drop = require('./items/drop');
 
 const LOOK_AROUND = 'Look around';
 const TAKE = 'Take';
-const VIEW_ITEMS = 'View items';
+const EXAMINE = 'Examine';
 const GO = 'Go';
+const DROP = 'Drop';
 
 const PROMPT_ACTION_STRING = 'What will you do';
 const PROMPT_ACTION_CHOICES = [
   LOOK_AROUND,
   GO,
-  TAKE
+  EXAMINE,
+  TAKE,
+  DROP
 ];
 
 const promptForAction = async (state, world) => {
@@ -27,6 +32,12 @@ const promptForAction = async (state, world) => {
       break;
     case TAKE:
       await take(state, world);
+      break;
+    case DROP:
+      await drop(state, world);
+      break;
+    case EXAMINE:
+      await examine(state, world);
       break;
   }
   await promptForAction(state, world);

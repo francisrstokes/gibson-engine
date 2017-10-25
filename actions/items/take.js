@@ -1,4 +1,3 @@
-const filter = require('lodash.filter');
 const util = require('../../util');
 
 const NOTHING_TO_TAKE = 'There\'s nothing to take.';
@@ -17,7 +16,7 @@ const getItemAddedString = (item) => {
 };
 
 module.exports = async (state, world) => {
-  const visibleItems = filter(world.rooms[state.location].items, util.items.itemIsVisible);
+  const visibleItems = world.rooms[state.location].items.filter(util.items.itemIsVisible);
 
   if (visibleItems.length) {
     const names = [...visibleItems.map(item => item.name), NONE];

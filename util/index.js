@@ -4,7 +4,7 @@ const loadSave = require('./load-save');
 const writeSave = require('./write-save');
 const prompt = require('./prompt');
 
-const getDynamicProperty = (state, obj, prop) => {
+const getDynamicProperty = (state, world, obj, prop) => {
   return (typeof obj[prop] === 'function')
     ? obj[prop](state)
     : obj[prop];

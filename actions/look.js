@@ -20,7 +20,7 @@ module.exports = async (state, world) => {
 
     forEach(currentLocation.items, (item) => {
       if (items.itemIsVisible(item)) {
-        output.writeLine(getItemHereString(item));
+        output.writeLine(getItemHereString(world.items[item.name]));
       }
     });
   }
