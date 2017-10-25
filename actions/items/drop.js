@@ -21,12 +21,19 @@ module.exports = async (state, world) => {
     if (chosenItemName !== NONE) {
       const chosenItem = state.inventory.find(item => item.name === chosenItemName);
       if (util.items.itemIsDropable(chosenItem)) {
-        console.log(state.inventory.items);
         state.inventory = state.inventory.filter(inventoryItem => inventoryItem.name !== chosenItemName);
         world.rooms[state.location].items.push(chosenItem);
-        util.output.writeLine(getItemDroppedString(chosenItem));
+
+        const dropText = (chosenItem.state.dropText)
+          ? chosenItem.state.dropText
+          : getItemDroppedString(chosenItem);
+
+        util.output.writeLine(dropText);
       } else {
-        util.output.writeLine(YOU_CANT_DROP);
+        const cantDropText = (chosenItem.state.cantDropText)
+          ? chosenItem.state.cantDropText
+          : YOU_CANT_DROP;
+        util.output.writeLine(cantDropText);
       }
     }
   }

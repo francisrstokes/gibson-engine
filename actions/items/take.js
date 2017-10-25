@@ -27,9 +27,16 @@ module.exports = async (state, world) => {
         world.rooms[state.location].items = world.rooms[state.location].items.filter(roomItem => roomItem.name !== chosenItemName);
         state.inventory.push(chosenItem);
 
-        util.output.writeLine(getItemAddedString(chosenItem));
+        const takeText = (chosenItem.state.takeText)
+          ? chosenItem.state.takeText
+          : getItemAddedString(chosenItem);
+
+        util.output.writeLine(takeText);
       } else {
-        util.output.writeLine(YOU_CANT_TAKE);
+        const cantTakeText = (chosenItem.state.cantTakeText)
+          ? chosenItem.state.cantTakeText
+          : YOU_CANT_TAKE;
+        util.output.writeLine(cantTakeText);
       }
     }
   } else {
