@@ -1,4 +1,4 @@
-const { output, items } = require('../util');
+const { output, items, getDynamicProperty } = require('../util');
 const forEach = require('lodash.foreach');
 
 const ITEM_HERE_1 = 'There is';
@@ -13,15 +13,13 @@ const getItemHereString = (item) => {
 
 module.exports = async (state, world) => {
   const currentLocation = world.rooms[state.location];
-  if (typeof currentLocation.description === 'function') {
-    await currentLocation.description(state, world);
-  } else {
-    output.writeLine(currentLocation.description);
+  const description = await getDynamicProperty(state, world, currentLocation, 'description');
+  output.writeLine(description);
 
-    forEach(currentLocation.items, (item) => {
-      if (items.itemIsVisible(item)) {
-        output.writeLine(getItemHereString(world.items[item.name]));
-      }
-    });
-  }
+  forEach(currentLocation.items, (item) => {
+    if (items.itemIsVisible(item)) {
+      output.writeLine(getItemHereString(world.items[item.name]));
+    }
+  });
+  output.newLine();
 };

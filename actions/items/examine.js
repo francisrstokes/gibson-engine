@@ -23,4 +23,5 @@ module.exports = async (state, world) => {
   } else {
     util.output.writeLine(NOTHING_TO_EXAMINE);
   }
+  util.output.newLine();
 };

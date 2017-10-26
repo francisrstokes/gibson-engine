@@ -1,4 +1,10 @@
 const inquirer = require('inquirer');
+const { newLine } = require('./output');
+
+const tap = (func) => (x) => {
+  func();
+  return x;
+};
 
 module.exports = {
   'continue': () => {
@@ -6,7 +12,8 @@ module.exports = {
       type: 'input',
       message: 'Press enter to continue',
       name: 'throwAway'
-    });
+    })
+    .then(newLine);
   },
   choice: (message, options) => {
     return inquirer.prompt({
@@ -14,7 +21,9 @@ module.exports = {
       message,
       name: 'response',
       choices: options
-    }).then(res => res.response);
+    })
+    .then(tap(newLine))
+    .then(res => res.response);
   },
   getTextIn: (message) => {
     return inquirer.prompt([{
@@ -22,6 +31,8 @@ module.exports = {
       type: 'input',
       name: 'response',
       validate: (input) => input !== ''
-    }]).then(res => res.response);
+    }])
+    .then(tap(newLine))
+    .then(res => res.response);
   }
 };

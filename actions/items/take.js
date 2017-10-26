@@ -42,4 +42,6 @@ module.exports = async (state, world) => {
   } else {
     util.output.writeLine(NOTHING_TO_TAKE);
   }
+
+  util.output.newLine();
 };

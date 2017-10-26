@@ -37,4 +37,5 @@ module.exports = async (state, world) => {
       }
     }
   }
+  util.output.newLine();
 };

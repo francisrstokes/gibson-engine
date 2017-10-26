@@ -1,4 +1,4 @@
-const { output } = require('../util');
+const { output, getDynamicProperty } = require('../util');
 
 module.exports = async (state, world, location) => {
   state.location = location;
@@ -9,6 +9,8 @@ module.exports = async (state, world, location) => {
     : true;
 
   if (doLook) {
-    output.writeLine(currentLocation.description);
+    const description = await getDynamicProperty(state, world, currentLocation, 'description');
+    output.writeLine(description);
+    output.newLine();
   }
 };
