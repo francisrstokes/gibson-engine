@@ -1,8 +1,10 @@
+// Use is essentially "use in room"
 const util = require('../../util');
 
-const NOTHING_TO_EXAMINE = 'Nothing to examine';
+const NOTHING_TO_USE = 'Nothing to use';
+const IT_DOES_NOTHING = 'Doesn\'t seem to do anything.';
 const WHICH_ITEM = 'Which item?';
-const INVENTORY_OR_LOCATION = 'Examine current location or your inventory?';
+const INVENTORY_OR_LOCATION = 'From current location or your inventory?';
 const INVENTORY = 'Inventory';
 const CURRENT_LOCATION = 'Current location';
 
@@ -18,10 +20,13 @@ module.exports = async (state, world) => {
 
   if (items.length) {
     const chosenItem = await util.prompt.choice(WHICH_ITEM, items.map(item => item.name));
-    const description = await util.getDynamicProperty(state, world, world.items[chosenItem], 'description');
-    util.output.writeLine(description);
+    if (typeof world.items[chosenItem].onUse === 'function') {
+      await world.items[chosenItem].onUse(state, world);
+    } else {
+      util.output.writeLine(IT_DOES_NOTHING);
+    }
   } else {
-    util.output.writeLine(NOTHING_TO_EXAMINE);
+    util.output.writeLine(NOTHING_TO_USE);
   }
   util.output.newLine();
 };
