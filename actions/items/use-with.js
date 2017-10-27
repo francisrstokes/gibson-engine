@@ -21,8 +21,10 @@ module.exports = async (state, world) => {
 
   if (items.length) {
     const chosenItem = await util.prompt.choice(WHICH_ITEM, items);
-    if (typeof world.items[chosenItem].onUse === 'function') {
-      await world.items[chosenItem].onUse(state, world);
+    const secondItem = await util.prompt.choice(WHICH_ITEM, items.filter(item => item.value !== chosenItem));
+
+    if (typeof world.items[chosenItem].onUseWith === 'function') {
+      await world.items[chosenItem].onUseWith(secondItem, state, world);
     } else {
       util.output.writeLine(IT_DOES_NOTHING);
     }
