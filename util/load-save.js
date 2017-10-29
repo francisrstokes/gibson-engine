@@ -13,15 +13,18 @@ const applyRoomPropToWorld = (world, saveData) =>
     });
   };
 
-module.exports = async (saveFileLocation, world, state) => {
+module.exports = async (options, world, _state) => {
+  let state = _state;
   try {
-    const stats = await lstatAsync(saveFileLocation);
+    const stats = await lstatAsync(options.saveFileLocation);
     if (stats.isFile()) {
-      const saveData = await JSON.parse(readFileAsync(saveFileLocation, 'utf8'));
+      const saveData = await JSON.parse(readFileAsync(options.saveFileLocation, 'utf8'));
       state = saveData.state;
       keys(saveData.world).forEach(applyRoomPropToWorld(world, saveData));
     }
   } catch (ex) {}
+
+  state._options = options;
 
   return {
     world,

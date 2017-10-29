@@ -15,12 +15,12 @@ const getItemAddedString = (item) => {
   return `${YOU_ADD_1}${prefix} ${item.name} ${YOU_ADD_2}`;
 };
 
-module.exports = async (state, world) => {
+module.exports = async (state, world, input, output) => {
   const visibleItems = world.rooms[state.location].items.filter(util.items.itemIsVisible);
 
   if (visibleItems.length) {
     const names = [...visibleItems.map(item => item.name), NONE];
-    const chosenItemName = await util.prompt.choice(WHICH_ITEM, names);
+    const chosenItemName = await input.choice(WHICH_ITEM, names);
     if (chosenItemName !== NONE) {
       const chosenItem = visibleItems.find(item => item.name === chosenItemName);
       if (util.items.itemIsTakeable(chosenItem)) {
@@ -31,17 +31,17 @@ module.exports = async (state, world) => {
           ? chosenItem.state.takeText
           : getItemAddedString(chosenItem);
 
-        util.output.writeLine(takeText);
+        output.writeLine(takeText);
       } else {
         const cantTakeText = (chosenItem.state.cantTakeText)
           ? chosenItem.state.cantTakeText
           : YOU_CANT_TAKE;
-        util.output.writeLine(cantTakeText);
+        output.writeLine(cantTakeText);
       }
     }
   } else {
-    util.output.writeLine(NOTHING_TO_TAKE);
+    output.writeLine(NOTHING_TO_TAKE);
   }
 
-  util.output.newLine();
+  output.newLine();
 };

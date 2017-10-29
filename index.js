@@ -8,8 +8,11 @@ module.exports = async ($state, $world, options = {}) => {
     process.exit(1);
   }
 
-  const { state, world } = await loadSave(options.saveFileLocation, $world, $state);
+  const input = options.input || require('./io/input');
+  const output = options.output || require('./io/output');
 
-  await enterRoom(state, world, state.location);
-  promptForAction(state, world);
+  const { state, world } = await loadSave(options, $world, $state);
+
+  await enterRoom(state, world, state.location, input, output);
+  promptForAction(state, world, input, output);
 };

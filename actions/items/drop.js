@@ -13,10 +13,10 @@ const getItemDroppedString = (item) => {
   return `${YOU_DROP}${prefix} ${item.name}`;
 };
 
-module.exports = async (state, world) => {
+module.exports = async (state, world, input, output) => {
   if (state.inventory.length) {
     const names = [...state.inventory.map(item => item.name), NONE];
-    const chosenItemName = await util.prompt.choice(WHICH_ITEM, names);
+    const chosenItemName = await input.choice(WHICH_ITEM, names);
 
     if (chosenItemName !== NONE) {
       const chosenItem = state.inventory.find(item => item.name === chosenItemName);
@@ -28,14 +28,14 @@ module.exports = async (state, world) => {
           ? chosenItem.state.dropText
           : getItemDroppedString(chosenItem);
 
-        util.output.writeLine(dropText);
+        output.writeLine(dropText);
       } else {
         const cantDropText = (chosenItem.state.cantDropText)
           ? chosenItem.state.cantDropText
           : YOU_CANT_DROP;
-        util.output.writeLine(cantDropText);
+        output.writeLine(cantDropText);
       }
     }
   }
-  util.output.newLine();
+  output.newLine();
 };

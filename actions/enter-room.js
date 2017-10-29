@@ -1,6 +1,6 @@
 const look = require('./look');
 
-module.exports = async (state, world, location) => {
+module.exports = async (state, world, location, input, output) => {
   state.location = location;
   const currentLocation = world.rooms[state.location];
 
@@ -9,6 +9,6 @@ module.exports = async (state, world, location) => {
     : true;
 
   if (doLook) {
-    await look(state, world);
+    await look(state, world, input, output);
   }
 };

@@ -1,8 +1,7 @@
 const items = require('./items');
-const output = require('./output');
 const loadSave = require('./load-save');
 const writeSave = require('./write-save');
-const prompt = require('./prompt');
+const player = require('./player');
 
 const getDynamicProperty = (state, world, obj, prop) => {
   return (typeof obj[prop] === 'function')
@@ -20,9 +19,8 @@ module.exports = {
   getDynamicProperty,
   roomNameToString,
 
-  prompt,
+  player,
   items,
-  output,
   loadSave,
   writeSave
 };

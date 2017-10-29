@@ -1,4 +1,3 @@
-const { prompt } = require('../util');
 const go = require('./go');
 const look = require('./look');
 const take = require('./items/take');
@@ -23,30 +22,31 @@ const PROMPT_ACTION_CHOICES = [
   USE
 ];
 
-const promptForAction = async (state, world) => {
-  const action = await prompt.choice(PROMPT_ACTION_STRING, PROMPT_ACTION_CHOICES);
+const promptForAction = async (state, world, input, output) => {
+  const action = await input.choice(PROMPT_ACTION_STRING, PROMPT_ACTION_CHOICES);
 
   switch (action) {
     case GO:
-      await go(state, world);
+      await go(state, world, input, output);
       break;
     case LOOK_AROUND:
-      await look(state, world);
+      await look(state, world, input, output);
       break;
     case TAKE:
-      await take(state, world);
+      await take(state, world, input, output);
       break;
     case DROP:
-      await drop(state, world);
+      await drop(state, world, input, output);
       break;
     case EXAMINE:
-      await examine(state, world);
+      await examine(state, world, input, output);
       break;
     case USE:
-      await use(state, world);
+      await use(state, world, input, output);
       break;
   }
-  await promptForAction(state, world);
+
+  await promptForAction(state, world, input, output);
 };
 
 module.exports = promptForAction;
