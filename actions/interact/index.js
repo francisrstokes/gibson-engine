@@ -1,11 +1,11 @@
-const { objectToChoices } = require('../util');
+const { objectToChoices } = require('../../util');
 const giveWrapper = require('./give-wrapper');
 
 const WITH_WHO = 'With whom?';
 const THERE_IS_NOONE = 'There is no one here.';
 const THEY_SAY_NOTHING = 'They say nothing.';
 const TALK = 'Talk to';
-const GIVE = 'Give to';
+const GIVE = 'Give something to';
 
 const defaultAction = (output, str) => () => output.writeLine(str);
 

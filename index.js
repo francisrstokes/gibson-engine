@@ -12,7 +12,6 @@ module.exports = async ($state, $world, options = {}) => {
   const output = options.output || require('./io/output');
 
   const { state, world } = await loadSave(options, $world, $state);
-
   await enterRoom(state, world, state.location, input, output);
   promptForAction(state, world, input, output);
 };

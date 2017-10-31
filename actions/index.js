@@ -1,3 +1,5 @@
+const writeSave = require('../util/write-save');
+
 const LOOK_AROUND = 'Look around';
 const TAKE = 'Take';
 const EXAMINE = 'Examine';
@@ -25,6 +27,10 @@ const PROMPT_ACTION_CHOICES = [
 const promptForAction = async (state, world, input, output) => {
   const action = await input.choice(PROMPT_ACTION_STRING, PROMPT_ACTION_CHOICES);
   await action(state, world, input, output);
+
+  // hook save
+  await writeSave(state._options.saveFileLocation, world, state);
+
   await promptForAction(state, world, input, output);
 };
 
