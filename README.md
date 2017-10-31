@@ -19,3 +19,24 @@ const myWorld = {
 
 Rooms describe places in game, items describe interactable objects, and actors are NPC characters the player interacts with.
 
+### Room Object
+
+A simple room object must have at least 3 properties:
+
+- *description*, which can be either a string or a function with the signature *(state, world)*
+- *items*, an array containing item references
+- *actors*, an array containing actor references
+
+```javascript
+const room = {
+  description: "You walk into a dark room.",
+  items: [],
+  actors: []
+};
+```
+
+Additionally you can use the game engine hooks to specify extra behaviour:
+
+- *onEnter(state, world)*
+- *onExit(state, world)*
+

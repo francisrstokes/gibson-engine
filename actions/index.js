@@ -1,51 +1,30 @@
-const go = require('./go');
-const look = require('./look');
-const take = require('./items/take');
-const examine = require('./items/examine');
-const drop = require('./items/drop');
-const use = require('./items/use');
-
 const LOOK_AROUND = 'Look around';
 const TAKE = 'Take';
 const EXAMINE = 'Examine';
 const GO = 'Go';
 const DROP = 'Drop';
 const USE = 'Use';
+const INTERACT = 'Interact with';
+
+const actionToChoice = (action, func) => ({
+  name: action,
+  value: func
+});
 
 const PROMPT_ACTION_STRING = 'What will you do';
 const PROMPT_ACTION_CHOICES = [
-  LOOK_AROUND,
-  GO,
-  EXAMINE,
-  TAKE,
-  DROP,
-  USE
+  actionToChoice(LOOK_AROUND, require('./look')),
+  actionToChoice(GO, require('./go')),
+  actionToChoice(EXAMINE, require('./items/examine')),
+  actionToChoice(TAKE, require('./items/take')),
+  actionToChoice(DROP, require('./items/drop')),
+  actionToChoice(USE, require('./items/use')),
+  actionToChoice(INTERACT, require('./interact'))
 ];
 
 const promptForAction = async (state, world, input, output) => {
   const action = await input.choice(PROMPT_ACTION_STRING, PROMPT_ACTION_CHOICES);
-
-  switch (action) {
-    case GO:
-      await go(state, world, input, output);
-      break;
-    case LOOK_AROUND:
-      await look(state, world, input, output);
-      break;
-    case TAKE:
-      await take(state, world, input, output);
-      break;
-    case DROP:
-      await drop(state, world, input, output);
-      break;
-    case EXAMINE:
-      await examine(state, world, input, output);
-      break;
-    case USE:
-      await use(state, world, input, output);
-      break;
-  }
-
+  await action(state, world, input, output);
   await promptForAction(state, world, input, output);
 };
 
