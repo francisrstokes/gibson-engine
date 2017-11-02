@@ -22,9 +22,9 @@ const objectToChoices = (obj) => ({
   value: obj
 });
 
-const hookEvent = (thing, event, state, world) => {
+const hookEvent = (thing, event, state, world, ...rest) => {
   if (typeof thing[event] === 'function') {
-    return thing[event](state, world);
+    return thing[event](...rest, state, world);
   }
   return true;
 };

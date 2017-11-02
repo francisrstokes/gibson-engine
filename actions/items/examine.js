@@ -10,10 +10,14 @@ module.exports = async (state, world, input, output) => {
     const chosenItem = await input.choice(WHICH_ITEM, items);
     const worldItem = world.items[chosenItem];
 
-    if (!util.hookEvent(worldItem, 'onBeforeExamine', state, world)) return;
+    let continueAfterHook = await util.hookEvent(worldItem, 'onBeforeExamine', state, world);
+    if (!continueAfterHook) return;
+
     const description = await util.getDynamicProperty(state, world, worldItem, 'description');
     output.writeLine(description);
-    if (!util.hookEvent(worldItem, 'onAfterExamine', state, world)) return;
+
+    continueAfterHook = util.hookEvent(worldItem, 'onAfterExamine', state, world);
+    if (!continueAfterHook) return;
   } else {
     output.writeLine(NOTHING_TO_EXAMINE);
   }

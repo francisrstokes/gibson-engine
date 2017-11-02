@@ -23,6 +23,10 @@ module.exports = async (state, world, input, output) => {
     const chosenItemName = await input.choice(WHICH_ITEM, names);
     if (chosenItemName !== NONE) {
       const chosenItem = visibleItems.find(item => item.name === chosenItemName);
+
+      let continueAfterHook = await util.hookEvent(world.items[chosenItem], 'onBeforeTake', state, world);
+      if (!continueAfterHook) return;
+
       if (util.items.itemIsTakeable(chosenItem)) {
         world.rooms[state.location].items = world.rooms[state.location].items.filter(roomItem => roomItem.name !== chosenItemName);
         state.inventory.push(chosenItem);
@@ -38,6 +42,9 @@ module.exports = async (state, world, input, output) => {
           : YOU_CANT_TAKE;
         output.writeLine(cantTakeText);
       }
+
+      continueAfterHook = await util.hookEvent(world.items[chosenItem], 'onAfterTake', state, world);
+      if (!continueAfterHook) return;
     }
   } else {
     output.writeLine(NOTHING_TO_TAKE);
