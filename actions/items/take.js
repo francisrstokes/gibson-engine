@@ -8,12 +8,8 @@ const NONE = '[None]';
 const YOU_ADD_1 = 'You add';
 const YOU_ADD_2 = 'to your inventory.';
 
-const getItemAddedString = (item) => {
-  const prefix = (item.prefix)
-    ? ` ${item.prefix}`
-    : '';
-  return `${YOU_ADD_1}${prefix} ${item.name} ${YOU_ADD_2}`;
-};
+const getItemAddedString = (item) =>
+  `${YOU_ADD_1} ${util.items.getPrefix(item)} ${util.items.getDisplayName(item)} ${YOU_ADD_2}`;
 
 module.exports = async (state, world, input, output) => {
   const visibleItems = world.rooms[state.location].items.filter(util.items.itemIsVisible);
@@ -24,7 +20,7 @@ module.exports = async (state, world, input, output) => {
     if (chosenItemName !== NONE) {
       const chosenItem = visibleItems.find(item => item.name === chosenItemName);
 
-      let continueAfterHook = await util.hookEvent(world.items[chosenItem], 'onBeforeTake', state, world);
+      let continueAfterHook = await util.hookEvent(world.items[chosenItemName], 'onBeforeTake', state, world);
       if (!continueAfterHook) return;
 
       if (util.items.itemIsTakeable(chosenItem)) {
@@ -33,7 +29,7 @@ module.exports = async (state, world, input, output) => {
 
         const takeText = (chosenItem.state.takeText)
           ? chosenItem.state.takeText
-          : getItemAddedString(chosenItem);
+          : getItemAddedString(chosenItem, util.items.getDisplayName(chosenItem));
 
         output.writeLine(takeText);
       } else {
@@ -43,7 +39,7 @@ module.exports = async (state, world, input, output) => {
         output.writeLine(cantTakeText);
       }
 
-      continueAfterHook = await util.hookEvent(world.items[chosenItem], 'onAfterTake', state, world);
+      continueAfterHook = await util.hookEvent(world.items[chosenItemName], 'onAfterTake', state, world);
       if (!continueAfterHook) return;
     }
   } else {

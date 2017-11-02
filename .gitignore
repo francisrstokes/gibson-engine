@@ -10,3 +10,4 @@ semantic
 .vscode
 bin/
 test.js
+game-save.json

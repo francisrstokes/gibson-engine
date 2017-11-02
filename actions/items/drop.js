@@ -6,12 +6,9 @@ const NONE = '[None]';
 
 const YOU_DROP = 'You drop';
 
-const getItemDroppedString = (item) => {
-  const prefix = (item.prefix)
-    ? ` ${item.prefix}`
-    : '';
-  return `${YOU_DROP}${prefix} ${item.name}`;
-};
+const getItemDroppedString = (item) =>
+  `${YOU_DROP}${util.items.getPrefix(item)} ${util.items.getDisplayName(item)}`;
+
 
 module.exports = async (state, world, input, output) => {
   const currentRoom = world.rooms[state.location];
@@ -30,7 +27,7 @@ module.exports = async (state, world, input, output) => {
 
         const dropText = (chosenItem.state.dropText)
           ? chosenItem.state.dropText
-          : getItemDroppedString(chosenItem);
+          : getItemDroppedString(chosenItem, getDisplayName(chosenItem));
 
         continueAfterHook = await util.hookEvent(world.items[chosenItemName], 'onAfterDrop', state, world);
         if (!continueAfterHook) return;
