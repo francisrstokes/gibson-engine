@@ -3,6 +3,8 @@ const loadSave = require('./load-save');
 const writeSave = require('./write-save');
 const player = require('./player');
 
+const NONE = '[None]';
+
 const getDynamicProperty = (state, world, obj, prop) => {
   return (typeof obj[prop] === 'function')
     ? obj[prop](state)
@@ -20,10 +22,18 @@ const objectToChoices = (obj) => ({
   value: obj
 });
 
+const hookEvent = (thing, event, state, world) => {
+  if (typeof thing[event] === 'function') {
+    return thing[event](state, world);
+  }
+  return true;
+};
+
 module.exports = {
   getDynamicProperty,
   roomNameToString,
   objectToChoices,
+  hookEvent,
 
   player,
   items,
