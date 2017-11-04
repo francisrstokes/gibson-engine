@@ -1,10 +1,11 @@
 const util = require('../../util');
 
-const YOU_CANT_DROP = 'You can\'t drop that.';
-const WHICH_ITEM = 'Which item?';
-const NONE = '[None]';
-
-const YOU_DROP = 'You drop';
+const {
+  YOU_CANT_DROP,
+  WHICH_ITEM,
+  NONE,
+  YOU_DROP
+} = require('../../strings');
 
 const getItemDroppedString = (item) =>
   `${YOU_DROP}${util.items.getPrefix(item)} ${util.items.getDisplayName(item)}`;
@@ -27,7 +28,7 @@ module.exports = async (state, world, input, output) => {
 
         const dropText = (chosenItem.state.dropText)
           ? chosenItem.state.dropText
-          : getItemDroppedString(chosenItem, getDisplayName(chosenItem));
+          : getItemDroppedString(chosenItem);
 
         continueAfterHook = await util.hookEvent(world.items[chosenItemName], 'onAfterDrop', state, world);
         if (!continueAfterHook) return;

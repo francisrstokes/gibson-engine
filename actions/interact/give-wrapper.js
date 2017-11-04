@@ -1,5 +1,4 @@
-const YOU_HAVE_NOTHING = 'You have nothing to give.';
-const GIVE_WHAT = 'Give what?';
+const { YOU_HAVE_NOTHING, GIVE_WHAT } = require('../../strings');
 
 module.exports = (state, world, input, output, giveFunc) =>
   async () => {

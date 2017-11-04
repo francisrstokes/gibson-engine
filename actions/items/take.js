@@ -1,12 +1,12 @@
 const util = require('../../util');
-
-const NOTHING_TO_TAKE = 'There\'s nothing to take.';
-const YOU_CANT_TAKE = 'You can\'t take that.';
-const WHICH_ITEM = 'Which item?';
-const NONE = '[None]';
-
-const YOU_ADD_1 = 'You add';
-const YOU_ADD_2 = 'to your inventory.';
+const {
+  NOTHING_TO_TAKE,
+  YOU_CANT_TAKE,
+  WHICH_ITEM,
+  NONE,
+  YOU_ADD_1,
+  YOU_ADD_2
+} = require('../../strings');
 
 const getItemAddedString = (item) =>
   `${YOU_ADD_1} ${util.items.getPrefix(item)} ${util.items.getDisplayName(item)} ${YOU_ADD_2}`;
@@ -29,7 +29,7 @@ module.exports = async (state, world, input, output) => {
 
         const takeText = (chosenItem.state.takeText)
           ? chosenItem.state.takeText
-          : getItemAddedString(chosenItem, util.items.getDisplayName(chosenItem));
+          : getItemAddedString(chosenItem);
 
         output.writeLine(takeText);
       } else {

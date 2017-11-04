@@ -1,12 +1,13 @@
 const writeSave = require('../util/write-save');
-
-const LOOK_AROUND = 'Look around';
-const TAKE = 'Take';
-const EXAMINE = 'Examine';
-const GO = 'Go';
-const DROP = 'Drop';
-const USE = 'Use';
-const INTERACT = 'Interact with';
+const {
+  LOOK_AROUND,
+  TAKE,
+  EXAMINE,
+  GO,
+  DROP,
+  USE,
+  INTERACT
+} = require('../strings');
 
 const actionToChoice = (action, func) => ({
   name: action,

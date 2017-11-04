@@ -1,8 +1,9 @@
 const { getDynamicProperty } = require('../util');
 const enterRoom = require('./enter-room');
-
-const OPTION_STAY = 'Stay';
-const YOU_CAN_GO = 'You can go';
+const {
+  OPTION_STAY,
+  YOU_CAN_GO
+} = require('../strings.js');
 
 module.exports = async (state, world, input, output) => {
   const currentLocation = world.rooms[state.location];

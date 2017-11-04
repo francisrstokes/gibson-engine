@@ -1,9 +1,9 @@
 const { items, getDynamicProperty } = require('../util');
-
 const forEach = require('lodash.foreach');
-
-const ITEM_HERE_1 = 'There is';
-const ITEM_HERE_2 = 'here.';
+const {
+  ITEM_HERE_1,
+  ITEM_HERE_2
+} = require('../strings');
 
 const getItemHereString = (item) =>
 `${ITEM_HERE_1} ${items.getPrefix(item)} ${items.getDisplayName(item)} ${ITEM_HERE_2}`;

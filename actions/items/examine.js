@@ -1,8 +1,9 @@
 const util = require('../../util');
 const { getItemPromptForRoomAndInventory } = require('./util');
-
-const NOTHING_TO_EXAMINE = 'Nothing to examine';
-const WHICH_ITEM = 'Which item?';
+const {
+  NOTHING_TO_EXAMINE,
+  WHICH_ITEM
+} = require('../../strings');
 
 module.exports = async (state, world, input, output) => {
   const items = getItemPromptForRoomAndInventory(state, world);
