@@ -33,6 +33,13 @@ const hookEvent = (thing, event, state, world, ...rest) => {
   return true;
 };
 
+// getDynamicPropertyFp :: State -> World -> String -> a -> Promise b
+const getDynamicPropertyFp = curry((state, world, prop, obj) => {
+  return (typeof obj[prop] === 'function')
+    ? obj[prop](state)
+    : Promise.resolve(obj[prop]);
+});
+
 // hookEventFp :: String -> State -> World -> a -> a
 const hookEventFp = curry((event, state, world, thing) => {
   const res = hookEvent(thing, event, state, world);
@@ -47,6 +54,7 @@ module.exports = {
   hookEvent,
 
   hookEventFp,
+  getDynamicPropertyFp,
 
   functional,
   player,

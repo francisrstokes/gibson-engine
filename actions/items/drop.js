@@ -31,7 +31,7 @@ const {
 } = require('../../strings');
 
 const getItemDroppedString = (item) =>
-  `${YOU_DROP}${util.items.getPrefix(item)} ${util.items.getDisplayName(item)}`;
+  `${YOU_DROP} ${util.items.getPrefix(item)} ${util.items.getDisplayName(item)}`;
 
 // Object -> [Item]
 const pInventory = prop('inventory');
