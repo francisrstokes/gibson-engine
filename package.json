@@ -9,11 +9,13 @@
   "author": "Francis Stokes",
   "license": "MIT",
   "dependencies": {
+    "folktale": "^2.0.1",
     "inquirer": "^3.3.0",
     "lodash.filter": "^4.6.0",
     "lodash.foreach": "^4.5.0",
     "lodash.get": "^4.4.2",
-    "lodash.set": "^4.3.2"
+    "lodash.set": "^4.3.2",
+    "ramda": "^0.25.0"
   },
   "repository": {
     "type": "git",
