@@ -1,7 +1,11 @@
+const { curry } = require('ramda');
+const Maybe = require('folktale/maybe');
+
 const items = require('./items');
 const loadSave = require('./load-save');
 const writeSave = require('./write-save');
 const player = require('./player');
+const functional = require('./functional');
 
 const NONE = '[None]';
 
@@ -29,12 +33,30 @@ const hookEvent = (thing, event, state, world, ...rest) => {
   return true;
 };
 
+// getDynamicPropertyFp :: State -> World -> String -> a -> Promise b
+const getDynamicPropertyFp = curry((state, world, prop, obj) => {
+  return (typeof obj[prop] === 'function')
+    ? obj[prop](state)
+    : Promise.resolve(obj[prop]);
+});
+
+// hookedEventToMaybe :: String -> State -> World -> a -> a
+const hookedEventToMaybe = curry((event, state, world, thing) => {
+  const res = hookEvent(thing, event, state, world);
+  return res ? Maybe.of(thing) : Maybe.Nothing();
+});
+
+
 module.exports = {
   getDynamicProperty,
   roomNameToString,
   objectToChoices,
   hookEvent,
 
+  hookedEventToMaybe,
+  getDynamicPropertyFp,
+
+  functional,
   player,
   items,
   loadSave,

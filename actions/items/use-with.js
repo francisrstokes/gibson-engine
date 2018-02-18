@@ -1,4 +1,4 @@
-const { getItemPromptForRoomAndInventory } = require('./util');
+const { getItemPromptForRoomAndInventory } = require('./item-util');
 const util = require('../../util');
 const {
   NOTHING_TO_USE,

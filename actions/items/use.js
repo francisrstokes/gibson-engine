@@ -1,30 +1,53 @@
-const { getItemPromptForRoomAndInventory } = require('./util');
 const util = require('../../util');
+const { getItemPromptForRoomAndInventory } = require('./item-util');
+const {
+  maybeFromCondition,
+  maybeContinue,
+  maybe,
+  pipePromise
+} = util.functional;
+const {
+  length,
+  pipe,
+  pipeP,
+  gt,
+  __,
+  compose,
+  prop,
+  apply
+} = require('ramda');
 const {
   NOTHING_TO_USE,
   IT_DOES_NOTHING,
   WHICH_ITEM
 } = require('../../strings');
 
-module.exports = async (state, world, input, output) => {
-  const items = getItemPromptForRoomAndInventory(state, world);
+const hasOnUseFunction = (item) => (typeof item.onUse === 'function');
 
-  if (items.length) {
-    const chosenItem = await input.choice(WHICH_ITEM, items);
-
-    let continueAfterHook = await util.hookEvent(world.items[chosenItem], 'onBeforeUse', state, world);
-    if (!continueAfterHook) return;
-
-    if (typeof world.items[chosenItem].onUse === 'function') {
-      await world.items[chosenItem].onUse(state, world);
-    } else {
-      output.writeLine(IT_DOES_NOTHING);
-    }
-
-    continueAfterHook = await util.hookEvent(world.items[chosenItem], 'onAfterUse', state, world);
-    if (!continueAfterHook) return;
-  } else {
-    output.writeLine(NOTHING_TO_USE);
-  }
-  output.newLine();
+module.exports = (state, world, input, output) => {
+  return pipePromise(
+    apply(getItemPromptForRoomAndInventory),              // [choice]
+    maybeFromCondition(compose(gt(__, 0), length)),       // Maybe [choice]
+    maybe(
+      // Nothing
+      () => output.writeLine(NOTHING_TO_USE),
+      // Just
+      pipeP(
+        input.choice(WHICH_ITEM),                           // chosenItemName
+        prop(__, world.items),                              // item
+        util.hookedEventToMaybe('onBeforeUse', state, world),      // Maybe item
+        maybeContinue(item => pipePromise(
+          maybeFromCondition(hasOnUseFunction),             // Maybe item
+          maybe(
+            // Nothing
+            () => Promise.resolve(output.writeLine(IT_DOES_NOTHING)),
+            // Just
+            () => util.hookEvent(item, 'onUse', state, world)
+          ),
+          () => util.hookEvent(item, 'onAfterUse', state, world)
+        )(item))
+      )
+    ),
+    output.newLine
+  )([state, world])
 };

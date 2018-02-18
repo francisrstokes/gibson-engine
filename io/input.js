@@ -1,3 +1,4 @@
+const { curry } = require('ramda');
 const inquirer = require('inquirer');
 const { newLine } = require('./output');
 
@@ -15,7 +16,7 @@ module.exports = {
     })
     .then(newLine);
   },
-  choice: (message, options) => {
+  choice: curry((message, options) => {
     return inquirer.prompt({
       type: 'list',
       message,
@@ -23,8 +24,8 @@ module.exports = {
       choices: options
     })
     .then(tap(newLine))
-    .then(res => res.response);
-  },
+    .then(res => res.response)
+  }),
   getTextIn: (message) => {
     return inquirer.prompt([{
       message,

@@ -15,6 +15,7 @@ module.exports = (saveFileLocation, world, state) => {
     state,
     world: { rooms: {} }
   };
+
   keys(world.rooms).forEach(roomKey => {
     saveData.world.rooms[roomKey] = {
       items: world.rooms[roomKey].items.map(stateFulObjectWithName),

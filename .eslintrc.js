@@ -92,7 +92,7 @@ module.exports = {
                 "before": true
             }
         ],
-        "line-comment-position": "error",
+        "line-comment-position": "off",
         "linebreak-style": [
             "error",
             "unix"
@@ -106,11 +106,8 @@ module.exports = {
         "max-params": "off",
         "max-statements": "off",
         "max-statements-per-line": "error",
-        "multiline-ternary": [
-            "error",
-            "always"
-        ],
-        "new-cap": "error",
+        "multiline-ternary": "off",
+        "new-cap": "off",
         "new-parens": "error",
         "newline-after-var": "off",
         "newline-before-return": "off",
@@ -138,7 +135,7 @@ module.exports = {
         "no-floating-decimal": "error",
         "no-implicit-globals": "error",
         "no-implied-eval": "error",
-        "no-inline-comments": "error",
+        "no-inline-comments": "off",
         "no-invalid-this": "error",
         "no-iterator": "error",
         "no-label-var": "error",
