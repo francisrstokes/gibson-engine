@@ -51,7 +51,7 @@ const itemNameToItem = curry((state, itemName) => find(compose(equals(itemName),
 
 // tryToDropItem :: Item -> *
 const tryToDropItem = curry((state, world, output, item) => pipePromise(
-  util.hookEventFp('onBeforeDrop', state, world),
+  util.hookedEventToMaybe('onBeforeDrop', state, world),
   maybeContinue(pipe(
     () => mutableSet('inventory', state,
       filter(inItem => inItem.name !== item.name, state.inventory)),

@@ -2,26 +2,14 @@ const util = require('../util');
 const {
   maybeFromCondition,
   maybeContinue,
-  propDefault,
-  mutableSet,
   pipePromise
 } = util.functional;
 const {
-  curry,
-  pipe,
   pipeP,
-  prop,
-  length,
   compose,
-  gt,
-  filter,
-  __,
-  map,
   append,
   equals,
-  not,
-  ifElse,
-  find
+  not
 } = require('ramda');
 
 const enterRoom = require('./enter-room');
@@ -38,7 +26,7 @@ module.exports = (state, world, input, output) => {
     maybeFromCondition(compose(not, equals(OPTION_STAY))),  // Maybe chosenExit
     maybeContinue(chosenExit => pipePromise(
       () => world.rooms[state.location],                    // currentLocation
-      util.hookEventFp('onExit', state, world),             // currentLocation
+      util.hookedEventToMaybe('onExit', state, world),             // currentLocation
       maybeContinue(pipeP(
         () => enterRoom(state, world, chosenExit, input, output)
       ))

@@ -40,8 +40,8 @@ const getDynamicPropertyFp = curry((state, world, prop, obj) => {
     : Promise.resolve(obj[prop]);
 });
 
-// hookEventFp :: String -> State -> World -> a -> a
-const hookEventFp = curry((event, state, world, thing) => {
+// hookedEventToMaybe :: String -> State -> World -> a -> a
+const hookedEventToMaybe = curry((event, state, world, thing) => {
   const res = hookEvent(thing, event, state, world);
   return res ? Maybe.of(thing) : Maybe.Nothing();
 });
@@ -53,7 +53,7 @@ module.exports = {
   objectToChoices,
   hookEvent,
 
-  hookEventFp,
+  hookedEventToMaybe,
   getDynamicPropertyFp,
 
   functional,

@@ -1,5 +1,5 @@
 const util = require('../../util');
-const { getItemPromptForRoomAndInventory } = require('./util');
+const { getItemPromptForRoomAndInventory } = require('./item-util');
 const {
   maybeFromCondition,
   maybeContinue,
@@ -29,12 +29,12 @@ module.exports = (state, world, input, output) =>
       pipeP(
         input.choice(WHICH_ITEM),
         prop(__, world.items),
-        util.hookEventFp('onBeforeExamine', state, world),
+        util.hookedEventToMaybe('onBeforeExamine', state, world),
         maybeContinue(item => pipeP(
           util.getDynamicPropertyFp(state, world, 'description'),
           output.writeLine,
           () => item,
-          util.hookEventFp('onAfterExamine', state, world)
+          util.hookedEventToMaybe('onAfterExamine', state, world)
         )(item))
       )
     ),
